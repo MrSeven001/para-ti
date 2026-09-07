@@ -37,7 +37,7 @@
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            setStyles(); // Reafirma el color y la fuente tras redimensionar
+            setStyles(); 
         }
 
         window.addEventListener('resize', resizeCanvas);
@@ -46,34 +46,42 @@
         let scale = 11;
         let i = 0;
 
+        // --- FUNCIÓN DE DIBUJO ---
         function drawStep() {
+            // Mientras no hayamos completado todas las escalas del corazón
             if (scale <= 16) {
-                // Dibuja 5 puntos por fotograma para dar animación fluida
-                for (let step = 0; step < 5; step++) {
-                    if (scale > 16) break;
+                
+                // --- CAMBIO CLAVE AQUÍ: AHORA DIBUJAMOS SOLO 1 PUNTO A LA VEZ ---
+                // Se eliminó el bucle 'for' que dibujaba 5 puntos, logrando máxima lentitud y suavidad.
 
-                    let angle = i * (Math.PI * 2) / 120;
+                let angle = i * (Math.PI * 2) / 120;
 
-                    // Fórmula matemática del corazón
-                    let x = 16 * Math.pow(Math.sin(angle), 3) * scale;
-                    let y = (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle)) * scale;
+                // Fórmula matemática del corazón
+                let x = 16 * Math.pow(Math.sin(angle), 3) * scale;
+                let y = (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle)) * scale;
 
-                    // Centrar en la pantalla
-                    let screenX = (canvas.width / 2) + x;
-                    let screenY = (canvas.height / 2) - y;
+                // Centrar en la pantalla (invirtiendo Y porque en HTML Canvas el eje Y baja)
+                let screenX = (canvas.width / 2) + x;
+                let screenY = (canvas.height / 2) - y;
 
-                    ctx.fillText("I love you", screenX, screenY);
+                // Dibuja el texto "I love you" en rosa claro
+                ctx.fillText("I love you", screenX, screenY);
 
-                    i++;
-                    if (i >= 120) {
-                        i = 0;
-                        scale++;
-                    }
+                // Incrementa el índice de ángulo
+                i++;
+
+                // Si completamos una vuelta entera (120 puntos)
+                if (i >= 120) {
+                    i = 0;
+                    scale++; // Pasa a la siguiente capa del corazón (escala)
                 }
+
+                // Solicita el siguiente fotograma de animación
                 requestAnimationFrame(drawStep);
             }
         }
 
+        // Inicia la animación suave
         drawStep();
     </script>
 </body>
