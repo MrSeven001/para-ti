@@ -4,33 +4,66 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para ti ❤️</title>
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <!-- Librería p5.js para gráficos en navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    </style>
 </head>
-<body style="background-color: black; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden;">
-    
-    <script type="py">
-import math
-import turtle
+<body>
+    <script>
+        let currentScale = 11;
+        let currentI = 0;
 
-screen = turtle.Screen()
-screen.bgcolor("black")
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            background(0);
+            textAlign(CENTER, CENTER);
+            textSize(12);
+            fill("#ffb6c1");
+            textFont("Arial");
+        }
 
-t = turtle.Turtle()
-t.speed(0)
-t.hideturtle()
-t.penup()
-t.color("#ffb6c1")
+        function draw() {
+            // Dibuja múltiples puntos por fotograma para dar animación fluida
+            for (let step = 0; step < 10; step++) {
+                if (currentScale <= 16) {
+                    let angle = currentI * (TWO_PI) / 120;
 
-for scale in range(11, 17):
-    for i in range(120):
-        angle = i * (math.pi * 2) / 120
-        x = 16 * (math.sin(angle) ** 3) * scale
-        y = (13 * math.cos(angle) - 5 * math.cos(2 * angle) - 2 * math.cos(3 * angle) - math.cos(4 * angle)) * scale
-        t.goto(x, y)
-        t.write("I love you", align="center", font=("Arial", 8, "bold"))
+                    // Fórmula del corazón
+                    let x = 16 * Math.pow(Math.sin(angle), 3) * currentScale;
+                    let y = (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle)) * currentScale;
 
-turtle.done()
+                    // Ajuste al centro de la pantalla (y se invierte la coordenada Y)
+                    text("I love you", width / 2 + x, height / 2 - y);
+
+                    currentI++;
+                    if (currentI >= 120) {
+                        currentI = 0;
+                        currentScale++;
+                    }
+                } else {
+                    noLoop(); // Detiene la animación al terminar
+                }
+            }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+            background(0);
+            currentScale = 11;
+            currentI = 0;
+            loop();
+        }
     </script>
 </body>
 </html>
