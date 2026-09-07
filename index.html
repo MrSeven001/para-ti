@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para ti ❤️</title>
-    <!-- Librería p5.js para gráficos en navegador -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -17,53 +15,62 @@
             align-items: center;
             height: 100vh;
         }
+        canvas {
+            display: block;
+        }
     </style>
 </head>
 <body>
+    <canvas id="heartCanvas"></canvas>
+
     <script>
-        let currentScale = 11;
-        let currentI = 0;
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
 
-        function setup() {
-            createCanvas(windowWidth, windowHeight);
-            background(0);
-            textAlign(CENTER, CENTER);
-            textSize(12);
-            fill("#ffb6c1");
-            textFont("Arial");
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        function draw() {
-            // Dibuja múltiples puntos por fotograma para dar animación fluida
-            for (let step = 0; step < 10; step++) {
-                if (currentScale <= 16) {
-                    let angle = currentI * (TWO_PI) / 120;
+        let scale = 11;
+        let i = 0;
 
-                    // Fórmula del corazón
-                    let x = 16 * Math.pow(Math.sin(angle), 3) * currentScale;
-                    let y = (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle)) * currentScale;
+        ctx.fillStyle = "#ffb6c1";
+        ctx.font = "bold 8px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
 
-                    // Ajuste al centro de la pantalla (y se invierte la coordenada Y)
-                    text("I love you", width / 2 + x, height / 2 - y);
+        function drawStep() {
+            if (scale <= 16) {
+                // Dibuja 5 puntos por cada fotograma para dar animación fluida
+                for (let step = 0; step < 5; step++) {
+                    if (scale > 16) break;
 
-                    currentI++;
-                    if (currentI >= 120) {
-                        currentI = 0;
-                        currentScale++;
+                    let angle = i * (Math.PI * 2) / 120;
+
+                    // Fórmula matemática del corazón
+                    let x = 16 * Math.pow(Math.sin(angle), 3) * scale;
+                    let y = (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle)) * scale;
+
+                    // Centrar en la pantalla (invirtiendo Y porque en HTML Canvas el eje Y baja)
+                    let screenX = (canvas.width / 2) + x;
+                    let screenY = (canvas.height / 2) - y;
+
+                    ctx.fillText("I love you", screenX, screenY);
+
+                    i++;
+                    if (i >= 120) {
+                        i = 0;
+                        scale++;
                     }
-                } else {
-                    noLoop(); // Detiene la animación al terminar
                 }
+                requestAnimationFrame(drawStep);
             }
         }
 
-        function windowResized() {
-            resizeCanvas(windowWidth, windowHeight);
-            background(0);
-            currentScale = 11;
-            currentI = 0;
-            loop();
-        }
+        drawStep();
     </script>
 </body>
 </html>
