@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti ❤️</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+</head>
+<body style="background-color: black; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden;">
+    
+    <script type="py">
+import math
+import turtle
+
+screen = turtle.Screen()
+screen.bgcolor("black")
+
+t = turtle.Turtle()
+t.speed(0)
+t.hideturtle()
+t.penup()
+t.color("#ffb6c1")
+
+for scale in range(11, 17):
+    for i in range(120):
+        angle = i * (math.pi * 2) / 120
+        x = 16 * (math.sin(angle) ** 3) * scale
+        y = (13 * math.cos(angle) - 5 * math.cos(2 * angle) - 2 * math.cos(3 * angle) - math.cos(4 * angle)) * scale
+        t.goto(x, y)
+        t.write("I love you", align="center", font=("Arial", 8, "bold"))
+
+turtle.done()
+    </script>
+</body>
+</html>
