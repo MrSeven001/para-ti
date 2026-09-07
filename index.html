@@ -27,24 +27,28 @@
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
 
+        function setStyles() {
+            ctx.fillStyle = "#ffb6c1";
+            ctx.font = "bold 8px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+        }
+
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            setStyles(); // Reafirma el color y la fuente tras redimensionar
         }
+
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
         let scale = 11;
         let i = 0;
 
-        ctx.fillStyle = "#ffb6c1";
-        ctx.font = "bold 8px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-
         function drawStep() {
             if (scale <= 16) {
-                // Dibuja 5 puntos por cada fotograma para dar animación fluida
+                // Dibuja 5 puntos por fotograma para dar animación fluida
                 for (let step = 0; step < 5; step++) {
                     if (scale > 16) break;
 
@@ -54,7 +58,7 @@
                     let x = 16 * Math.pow(Math.sin(angle), 3) * scale;
                     let y = (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle)) * scale;
 
-                    // Centrar en la pantalla (invirtiendo Y porque en HTML Canvas el eje Y baja)
+                    // Centrar en la pantalla
                     let screenX = (canvas.width / 2) + x;
                     let screenY = (canvas.height / 2) - y;
 
